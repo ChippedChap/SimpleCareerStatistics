@@ -84,7 +84,6 @@ namespace SimpleCareerStatistics
 
 		private void DrawWindowContents()
 		{
-			
 			scrollPosition = GUILayout.BeginScrollView(scrollPosition);
 			GUILayout.BeginHorizontal();
 			// Date and Time
@@ -113,18 +112,16 @@ namespace SimpleCareerStatistics
 				);
 			GUILayout.EndHorizontal();
 			GUILayout.EndScrollView();
-			NetRow();
-			GUI.DragWindow();
-		}
 
-		private void NetRow()
-		{
+			// Marker and net info
 			GUILayout.BeginHorizontal();
 			GUILayout.Label("Marker Time:", StatGUIUtility.DateText, GUILayout.ExpandWidth(true));
 			GUILayout.Label(changes.Count > SumCutoffIndex ? changes[SumCutoffIndex].Time.ToDate() : "No Marker", StatGUIUtility.DateTextField, GUILayout.ExpandWidth(true));
 			GUILayout.Label("Net Change from Marker:", StatGUIUtility.DateText, GUILayout.ExpandWidth(true));
 			GUILayout.Label(cachedChange.ToString(StatGUIUtility.alwaysShowSign), StatGUIUtility.PosNegStyle(cachedChange, true), GUILayout.ExpandWidth(true));
 			GUILayout.EndHorizontal();
+
+			GUI.DragWindow();
 		}
 
 		private void PreRow(int i)
