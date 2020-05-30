@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ClickThroughFix;
+using System;
 using System.Reflection;
 using UnityEngine;
 
@@ -11,6 +12,10 @@ namespace SimpleCareerStatistics
 		public static readonly string alwaysShowSign = "+#;-#;0";
 
 		public static GUISkin BaseSkin { get; private set; }
+
+		public static GUIStyle PadlessButton { get; private set; }
+
+		public static GUIStyle BlankStyle { get; private set; }
 
 		public static GUIStyle DateText { get; private set; }
 
@@ -27,6 +32,12 @@ namespace SimpleCareerStatistics
 		public static void CreateStyles(GUISkin baseSkin)
 		{
 			BaseSkin = baseSkin;
+			BlankStyle = new GUIStyle();
+
+			PadlessButton = new GUIStyle(BaseSkin.button);
+			PadlessButton.padding = new RectOffset();
+			PadlessButton.alignment = TextAnchor.MiddleCenter;
+			PadlessButton.stretchWidth = false;
 
 			DateText = new GUIStyle(BaseSkin.label);
 			DateText.alignment = TextAnchor.MiddleCenter;
@@ -84,6 +95,34 @@ namespace SimpleCareerStatistics
 				postRow?.Invoke(i);
 			}
 			GUILayout.EndVertical();
+		}
+
+		public static void DrawWindowWidgets(this Rect windowRect, int widgetId, GUIStyle windowStyle, GUIStyle buttonStyle,
+			string[] labels, params Callback[] buttonAction)
+		{
+			Rect widgetRow = windowRect.WidgetRowFor(labels.Length, windowStyle.padding.top, windowStyle.padding.right / 2);
+			ClickThruBlocker.GUIWindow(
+				widgetId,
+				widgetRow,
+				(int id) =>
+				{
+					for (int i = 0; i < labels.Length; i++)
+						if (GUI.Button(new Rect(widgetRow.height * (labels.Length - 1 - i), 0, widgetRow.height, widgetRow.height), labels[i], buttonStyle))
+							if(i < buttonAction.Length) buttonAction[i]();
+				},
+				"", 
+				BlankStyle
+				);
+			GUI.BringWindowToFront(widgetId);
+		}
+
+		public static Rect WidgetRowFor(this Rect windowRect, int buttons, float buttonWidth, float rectMargin)
+		{
+			return new Rect(windowRect.x + windowRect.width - buttonWidth * buttons + rectMargin,
+				windowRect.y + rectMargin,
+				buttonWidth * buttons - 2 * rectMargin,
+				buttonWidth - 2 * rectMargin
+				);
 		}
 
 		public static GUIStyle PosNegStyle(float num, bool background = false)

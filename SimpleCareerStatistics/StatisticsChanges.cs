@@ -76,13 +76,12 @@ namespace SimpleCareerStatistics
 			OrderCheck();
 		}
 
-		public Rect DrawWindow(Rect original)
+		public Rect DrawWindow(Rect original, int id)
 		{
-			// I don't know what to put for id so I'll just use a random int
-			return ClickThruBlocker.GUILayoutWindow(1234508710, original, (int id) => { DrawWindowContents(); }, DisplayName);
+			return ClickThruBlocker.GUILayoutWindow(id, original, DrawWindowContents, DisplayName);
 		}
 
-		private void DrawWindowContents()
+		private void DrawWindowContents(int id)
 		{
 			scrollPosition = GUILayout.BeginScrollView(scrollPosition);
 			GUILayout.BeginHorizontal();

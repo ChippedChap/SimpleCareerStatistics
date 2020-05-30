@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using ClickThroughFix;
 
 namespace SimpleCareerStatistics
 {
@@ -26,7 +27,9 @@ namespace SimpleCareerStatistics
 		{
 			if (!show) return;
 			GUI.skin = StatGUIUtility.BaseSkin;
-			windowPosition = trackers[currentTracker].DrawWindow(windowPosition);
+			// I don't know what to put for id so I'll just use random ints
+			windowPosition = trackers[currentTracker].DrawWindow(windowPosition, 1234508710);
+			windowPosition.DrawWindowWidgets(224508712, GUI.skin.window, StatGUIUtility.PadlessButton, new string[] { "X" }, () => { Close(GameScenes.LOADING); });
 		}
 
 		public void Open()
